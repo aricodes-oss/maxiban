@@ -2,10 +2,18 @@ name: Publish
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
+  tag:
+    name: Bump tag
+    runs-on: ubuntu-latest
+    steps:
+      - name: Bump version and push tag
+        uses: laputansoft/github-tag-action@v4.6
+        with:
+          github_token: ${{ env.github-token }}
+
   build:
     name: Build binaries
     strategy:
