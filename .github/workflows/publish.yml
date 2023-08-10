@@ -1,20 +1,13 @@
 name: Publish
 
 on:
-  push:
-    branches: [main]
+  release:
+    types: [created]
 
 jobs:
-  tag:
-    name: Bump tag
-    runs-on: ubuntu-latest
-    steps:
-      - name: Bump version and push tag
-        uses: laputansoft/github-tag-action@v4.6
-        with:
-          github_token: ${{ env.github-token }}
-
   build:
+    permissions:
+      contents: write
     name: Build binaries
     strategy:
       matrix:
@@ -36,6 +29,7 @@ jobs:
           goos: ${{ matrix.goos }}
           goarch: ${{ matrix.goarch }}
           extra_files: LICENSE README.md
+          binary_name: maxiban
         env:
           GOOS: ${{ matrix.os }}
           GOARCH: ${{ matrix.architecture }}
