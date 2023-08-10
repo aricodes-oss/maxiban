@@ -8,13 +8,22 @@ jobs:
   tag:
     name: Bump tag
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
+      - name: Checkout the repository
+        uses: actions/checkout@master
       - name: Bump version and push tag
-        uses: laputansoft/github-tag-action@v4.6
-        with:
-          github_token: ${{ env.github-token }}
+        uses: anothrNick/github-tag-action@1.64.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WITH_V: false
 
   build:
+    permissions:
+      contents: write
+    needs:
+      - tag
     name: Build binaries
     strategy:
       matrix:
